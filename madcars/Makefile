@@ -89,6 +89,7 @@ dirs:
 clean:
 	@echo "Deleting $(BIN_NAME) symlink"
 	@$(RM) $(BIN_NAME)
+	@$(RM) $(BIN_NAME).zip
 	@echo "Deleting directories"
 	@$(RM) -r .build
 	@$(RM) -r .bin
@@ -116,6 +117,12 @@ $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo "Compiling: $< -> $@"
 	@$(START_TIME)
-	$(CMD_PREFIX)$(CXX) $(CXXFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
+	$(CMD_PREFIX)$(CXX) $(CXXFLAGS) $(DEFINES) $(INCLUDES) -MP -MMD -c $< -o $@
 	@echo -en "\t Compile time: "
 	@$(END_TIME)
+
+$(BIN_NAME).zip:
+	zip -ruj $(BIN_NAME).zip src/ include/
+
+.PHONY: zip
+zip: $(BIN_NAME).zip

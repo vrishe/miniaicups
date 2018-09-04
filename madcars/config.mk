@@ -10,6 +10,8 @@ SRC_PATH = src
 LIBS =
 # General compiler flags
 COMPILE_FLAGS = -std=c++17 -Wall -Wextra -g
+# Preprocessor defines
+DEFINES = -DENV_LOCAL
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH) -I include -I dockers/cpp17
 # General linker settings

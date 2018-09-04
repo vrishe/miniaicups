@@ -2,9 +2,10 @@
 #include <iostream>
 #include <map>
 #include <string>
+
+#include "env.h"
 #include "model.h"
 #include "strategy.h"
-#include "nlohmann/json.hpp"
 
 using nlohmann::json;
 typedef void (*msg_proc_)(const json&);
