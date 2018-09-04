@@ -1,2 +1,5 @@
 *.sublime-workspace
-Runners/visio.gz
+visio.gz
+.bin/
+.build/
+/madcars
