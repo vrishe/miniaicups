@@ -1,6 +1,7 @@
+*.log.gz
 *.sublime-workspace
-visio.gz
 .bin/
 .build/
 /madcars
 /madcars.zip
+visio.gz
