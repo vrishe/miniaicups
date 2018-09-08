@@ -1,5 +1,9 @@
-#ifndef VRISHE_STRATEGY_
-#define VRISHE_STRATEGY_
+#pragma once
+
+#ifndef VRISHE_STRATEGY_H_
+#define VRISHE_STRATEGY_H_
+
+#include <cstdint>
 
 #include "model.h"
 
@@ -17,4 +21,5 @@ void on_tick(const ProtoCar&, const ProtoMap&,
 	int32_t enemy_lives, int32_t my_lives);
 
 } // namespace strategy
-#endif
+
+#endif // VRISHE_STRATEGY_H_

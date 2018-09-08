@@ -122,7 +122,8 @@ $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@$(END_TIME)
 
 $(BIN_NAME).zip:
-	zip -ruj $(BIN_NAME).zip src/ include/
+	@pushd ./include && zip -ru $(CURDIR)/$(BIN_NAME).zip ./*; popd
+	@pushd ./src && zip -ru $(CURDIR)/$(BIN_NAME).zip ./*; popd
 
 .PHONY: zip
 zip: $(BIN_NAME).zip

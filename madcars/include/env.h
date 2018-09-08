@@ -1,5 +1,7 @@
-#ifndef VRISHE_ENV_
-#define VRISHE_ENV_
+#pragma once
+
+#ifndef VRISHE_ENV_H_
+#define VRISHE_ENV_H_
 
 #ifndef ENV_LOCAL
 #include "../nlohmann/json.hpp"
@@ -7,4 +9,4 @@
 #include "nlohmann/json.hpp"
 #endif // ENV_LOCAL
 
-#endif
+#endif // VRISHE_ENV_H_
