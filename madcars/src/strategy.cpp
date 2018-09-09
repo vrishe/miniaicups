@@ -1,5 +1,6 @@
 #include "strategy.h"
 
+#include <array>
 #include <iostream>
 #include <string>
 
@@ -9,6 +10,10 @@
 namespace strategy {
 
 namespace {
+
+// Point buffer, that holds points for both body and button polygons
+// per playing side. 0th buffer is for enemy, the last one is for us.  
+// 
 
 math::Mat23f mtx;
 std::vector<math::Vec2f> point_buffer[2];
