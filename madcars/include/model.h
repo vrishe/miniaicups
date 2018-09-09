@@ -13,23 +13,23 @@
 namespace nlohmann {
 
 template <>
-struct adl_serializer<math::Vec2d> {
-    static void to_json(json& j, const math::Vec2d& v) {
+struct adl_serializer<math::Vec2f> {
+    static void to_json(json& j, const math::Vec2f& v) {
     	j = v.data;
     }
 
-    static void from_json(const json& j, math::Vec2d& v) {
+    static void from_json(const json& j, math::Vec2f& v) {
     	v = { j[0], j[1] };
     }
 };
 
 template <>
-struct adl_serializer<math::Vec3d> {
-    static void to_json(json& j, const math::Vec3d& v) {
+struct adl_serializer<math::Vec3f> {
+    static void to_json(json& j, const math::Vec3f& v) {
     	j = v.data;
     }
 
-    static void from_json(const json& j, math::Vec3d& v) {
+    static void from_json(const json& j, math::Vec3f& v) {
     	v = { j[0], j[1], j[2] };
     }
 };
@@ -40,8 +40,8 @@ namespace model {
 
 using nlohmann::json;
 
-using Point2D = math::Vec2d;
-using Transform2D = math::Vec3d;
+using Point2D = math::Vec2f;
+using Transform2D = math::Vec3f;
 
 struct Car {
 #define WHEEL_REAR  0
@@ -49,8 +49,8 @@ struct Car {
 
 	Transform2D wheels[2];
 	Point2D position;
-	double  rotation;
-	float   side;
+	float rotation;
+	float side;
 
 	friend void from_json(const json& src, Car& dst) {
 		dst.wheels[WHEEL_FRONT] = src.at(4);
@@ -72,21 +72,21 @@ struct ProtoCar {
 		rear_wheel_joint,
 		rear_wheel_position;
 
-	double car_body_mass,
+	float car_body_mass,
 		car_body_elasticity,
 		car_body_friction,
 		drive,
 		max_angular_speed,
 		max_speed;
 
-	double front_wheel_radius,
+	float front_wheel_radius,
 		front_wheel_mass,
 		front_wheel_friction,
 		front_wheel_elasticity,
 		front_wheel_damp_damping,
 		front_wheel_damp_length,
 		front_wheel_damp_stiffness;
-	double rear_wheel_radius,
+	float rear_wheel_radius,
 		rear_wheel_mass,
 		rear_wheel_friction,
 		rear_wheel_elasticity,
@@ -107,26 +107,26 @@ struct ProtoCar {
 		dst.rear_wheel_damp_position = src.at("rear_wheel_damp_position").get<Point2D>();
 		dst.rear_wheel_joint = src.at("rear_wheel_joint").get<Point2D>();
 		dst.rear_wheel_position = src.at("rear_wheel_position").get<Point2D>();
-		dst.car_body_mass = src.at("car_body_mass").get<double>();
-		dst.car_body_elasticity = src.at("car_body_elasticity").get<double>();
-		dst.car_body_friction = src.at("car_body_friction").get<double>();
-		dst.drive = src.at("drive").get<double>();
-		dst.max_angular_speed = src.at("max_angular_speed").get<double>();
-		dst.max_speed = src.at("max_speed").get<double>();
-		dst.front_wheel_radius = src.at("front_wheel_radius").get<double>();
-		dst.front_wheel_mass = src.at("front_wheel_mass").get<double>();
-		dst.front_wheel_friction = src.at("front_wheel_friction").get<double>();
-		dst.front_wheel_elasticity = src.at("front_wheel_elasticity").get<double>();
-		dst.front_wheel_damp_damping = src.at("front_wheel_damp_damping").get<double>();
-		dst.front_wheel_damp_length = src.at("front_wheel_damp_length").get<double>();
-		dst.front_wheel_damp_stiffness = src.at("front_wheel_damp_stiffness").get<double>();
-		dst.rear_wheel_radius = src.at("rear_wheel_radius").get<double>();
-		dst.rear_wheel_mass = src.at("rear_wheel_mass").get<double>();
-		dst.rear_wheel_friction = src.at("rear_wheel_friction").get<double>();
-		dst.rear_wheel_elasticity = src.at("rear_wheel_elasticity").get<double>();
-		dst.rear_wheel_damp_damping = src.at("rear_wheel_damp_damping").get<double>();
-		dst.rear_wheel_damp_length = src.at("rear_wheel_damp_length").get<double>();
-		dst.rear_wheel_damp_stiffness = src.at("rear_wheel_damp_stiffness").get<double>();
+		dst.car_body_mass = src.at("car_body_mass").get<float>();
+		dst.car_body_elasticity = src.at("car_body_elasticity").get<float>();
+		dst.car_body_friction = src.at("car_body_friction").get<float>();
+		dst.drive = src.at("drive").get<float>();
+		dst.max_angular_speed = src.at("max_angular_speed").get<float>();
+		dst.max_speed = src.at("max_speed").get<float>();
+		dst.front_wheel_radius = src.at("front_wheel_radius").get<float>();
+		dst.front_wheel_mass = src.at("front_wheel_mass").get<float>();
+		dst.front_wheel_friction = src.at("front_wheel_friction").get<float>();
+		dst.front_wheel_elasticity = src.at("front_wheel_elasticity").get<float>();
+		dst.front_wheel_damp_damping = src.at("front_wheel_damp_damping").get<float>();
+		dst.front_wheel_damp_length = src.at("front_wheel_damp_length").get<float>();
+		dst.front_wheel_damp_stiffness = src.at("front_wheel_damp_stiffness").get<float>();
+		dst.rear_wheel_radius = src.at("rear_wheel_radius").get<float>();
+		dst.rear_wheel_mass = src.at("rear_wheel_mass").get<float>();
+		dst.rear_wheel_friction = src.at("rear_wheel_friction").get<float>();
+		dst.rear_wheel_elasticity = src.at("rear_wheel_elasticity").get<float>();
+		dst.rear_wheel_damp_damping = src.at("rear_wheel_damp_damping").get<float>();
+		dst.rear_wheel_damp_length = src.at("rear_wheel_damp_length").get<float>();
+		dst.rear_wheel_damp_stiffness = src.at("rear_wheel_damp_stiffness").get<float>();
 		dst.external_id = src.at("external_id").get<int32_t>();
 		// Optional
 		auto squared_wheels_opt = src.find("squared_wheels");
@@ -138,7 +138,7 @@ struct ProtoCar {
 struct Segment {
 	Point2D start,
 		end;
-	double thickness;
+	float thickness;
 
 	friend void from_json(const json& src, Segment& dst) {
 		dst.start = src.at(0);
@@ -177,12 +177,12 @@ struct Tick {
 	Car enemy_car,
 		my_car;
 	
-	double deadline_position;
+	float deadline_position;
 
 	friend void from_json(const json& src, Tick& dst) {
 		dst.enemy_car = src.at("enemy_car").get<Car>();
 		dst.my_car = src.at("my_car").get<Car>();
-		dst.deadline_position = src.at("deadline_position").get<double>();
+		dst.deadline_position = src.at("deadline_position").get<float>();
 	}
 }; // struct Tick
 

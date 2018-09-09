@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef VRISHE_PLANAR_RESTRICTED_H_
-#define VRISHE_PLANAR_RESTRICTED_H_
+#ifndef VRISHE_LINALG_PLANAR_RESTRICTED_H_
+#define VRISHE_LINALG_PLANAR_RESTRICTED_H_
 
 #include "internal_.h"
 #include "interpolation.h"
@@ -10,13 +10,18 @@
 namespace math {
 
 // MATRIX 2x3
-MATH_DEFINE_MATRIX(double, d, 2, 3);
 MATH_DEFINE_MATRIX(float, f, 2, 3);
 
 template<>
 inline Mat23f& operator*=<Mat23f>(Mat23f& obj, float scalar) {
   obj[0][0]*=scalar; obj[0][1]*=scalar; obj[0][2]*=scalar;
   obj[1][0]*=scalar; obj[1][1]*=scalar; obj[1][2]*=scalar;
+  return obj;
+}
+template<>
+inline Mat23f& operator/=<Mat23f>(Mat23f& obj, float scalar) {
+  obj[0][0]/=scalar; obj[0][1]/=scalar; obj[0][2]/=scalar;
+  obj[1][0]/=scalar; obj[1][1]/=scalar; obj[1][2]/=scalar;
   return obj;
 }
 
@@ -60,23 +65,23 @@ inline Mat23f rotation(float r, float cx, float cy) {
   };
 }
 
-inline Mat23f scale(float sx, float sy) {
+inline Mat23f scaling(float sx, float sy) {
   return Mat23f { 
     sx, 0,  0, 
     0,  sy, 0,
   };
 }
-inline Mat23f scale(float s) {
-  return scale(s, s);
+inline Mat23f scaling(float s) {
+  return scaling(s, s);
 }
-inline Mat23f scale(float sx, float sy, float cx, float cy) {
+inline Mat23f scaling(float sx, float sy, float cx, float cy) {
   return Mat23f {
     sx, 0,  cx - sx*cx,
     0,  sy, cy - sy*cy,
   };
 }
-inline Mat23f scale(float s, float cx, float cy) {
-  return scale(s, s, cx, cy);
+inline Mat23f scaling(float s, float cx, float cy) {
+  return scaling(s, s, cx, cy);
 }
 
 inline Mat23f translation(float tx, float ty) {
@@ -94,7 +99,6 @@ inline Mat23f unity<Mat23f>() {
 } // namespace Mat
 
 // VECTOR 2
-MATH_DEFINE_VECTOR(double, d, 2);
 MATH_DEFINE_VECTOR(float, f, 2);
 
 template<>
@@ -102,15 +106,57 @@ inline Vec2f& operator*=<Vec2f>(Vec2f& obj, float scalar) {
   obj[0]*=scalar; obj[1]*=scalar;
   return obj;
 }
+template<>
+inline Vec2f& operator/=<Vec2f>(Vec2f& obj, float scalar) {
+  obj[0]/=scalar; obj[1]/=scalar;
+  return obj;
+}
+inline Vec2f operator+(const Vec2f& a, const Vec2f& b) {
+  return { a[0]+b[0], a[1]+b[1] };
+}
+inline Vec2f& operator+=(Vec2f& a, const Vec2f& b) {
+  a[0]+=b[0]; a[1]+=b[1];
+  return a;
+}
+inline Vec2f operator-(const Vec2f& a, const Vec2f& b) {
+  return { a[0]-b[0], a[1]-b[1] };
+}
+inline Vec2f& operator-=(Vec2f& a, const Vec2f& b) {
+  a[0]-=b[0]; a[1]-=b[1];
+  return a;
+}
 
 namespace Vec {
 
+template<class F>
+inline Vec2f& modify(Vec2f& v, const Vec2f& v1, F func) {
+  v[0] = func(v[0], v1[0]);
+  v[1] = func(v[1], v1[1]);
+  return v;
+}
 inline float len(const Vec2f& vec) {
   return std::sqrt(vec[0]*vec[0]+vec[1]*vec[1]);
 }
 
 } // namespace Vec
 
+
+inline Mat23f& operator*=(Mat23f& a, const Mat23f& b) {
+  // Row #1
+  a[0][0] = a[0][0]*b[0][0]+a[0][1]*b[1][0];
+  a[0][1] = a[0][0]*b[0][1]+a[0][1]*b[1][1];
+  a[0][2] = a[0][0]*b[0][2]+a[0][1]*b[1][2]+a[0][2];
+  // Row #2
+  a[1][0] = a[1][0]*b[0][0]+a[1][1]*b[1][0];
+  a[1][1] = a[1][0]*b[0][1]+a[1][1]*b[1][1];
+  a[1][2] = a[1][0]*b[0][2]+a[1][1]*b[1][2]+a[1][2];
+  return a;
+}
+inline Vec2f& operator*=(Vec2f& v, const Mat23f& m) {
+  v[0] = m[0][0]*v[0]+m[0][1]*v[1]+m[0][2];
+  v[1] = m[1][0]*v[0]+m[1][1]*v[1]+m[1][2];
+  return v;
+}
 
 inline Mat23f operator*(const Mat23f& a, const Mat23f& b) {
   return Mat23f {
@@ -124,24 +170,14 @@ inline Mat23f operator*(const Mat23f& a, const Mat23f& b) {
     a[1][0]*b[0][2]+a[1][1]*b[1][2]+a[1][2],
   };
 }
-inline Vec2f operator*(const Mat23f& m, const Vec2f& v) {
+inline Vec2f operator*(const Vec2f& v, const Mat23f& m) {
   return Vec2f {
     m[0][0]*v[0]+m[0][1]*v[1]+m[0][2],
     m[1][0]*v[0]+m[1][1]*v[1]+m[1][2],
   };
 }
-inline Vec2f operator*(const Vec2f &v, const Mat23f& m) {
-  return Vec2f {
-    v[0]*m[0][0]+v[1]*m[1][0]+m[2][0],
-    v[0]*m[0][1]+v[1]*m[1][1]+m[2][1],
-  };
-}
-
-inline Mat23f& operator*=(Mat23f& a, const Mat23f& b) {
-  return a = a*b;
-}
-inline Vec2f& operator*=(Vec2f& a, const Mat23f& b) {
-  return a = a*b;
+inline Vec2f operator*(const Mat23f& m, const Vec2f& v) {
+  return v*m;
 }
 
 
@@ -194,4 +230,4 @@ float get(const Grid<TValue>& grid, const Mat23f transform, const Vec2f& locatio
 } // namespace pf
 } // namespace math
 
-#endif // VRISHE_PLANAR_RESTRICTED_H_
+#endif // VRISHE_LINALG_PLANAR_RESTRICTED_H_

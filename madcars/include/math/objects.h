@@ -130,7 +130,7 @@ struct Vec_ {
   TScalar data[TSize];
 
   TScalar& operator[](size_t i) { return data[i]; }
-  TScalar operator[](size_t i) const { return data[i]; }
+  const TScalar& operator[](size_t i) const { return data[i]; }
 
   iterator begin() { return &data[0]; }
   iterator end() { return begin() + Size; }
@@ -147,6 +147,14 @@ inline TObj& operator*=(TObj& obj, typename TObj::value_type scalar) {
 
   while (from != to)
     *from++*=scalar;
+}
+template<class TObj>
+inline TObj& operator/=(TObj& obj, typename TObj::value_type scalar) {
+  auto from=obj.begin(), 
+       to=obj.end();
+
+  while (from != to)
+    *from++/=scalar;
 }
 template<class TObj>
 inline TObj operator*(const TObj& obj, typename TObj::value_type scalar) {

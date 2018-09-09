@@ -9,4 +9,9 @@
 #include "nlohmann/json.hpp"
 #endif // ENV_LOCAL
 
+namespace env {
+	size_t get_ticks();
+	size_t get_ticks_total();
+}
+
 #endif // VRISHE_ENV_H_
